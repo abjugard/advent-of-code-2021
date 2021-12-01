@@ -4,15 +4,7 @@ today = day(2021, 1)
 
 
 def larger_than_previous(depths):
-  depths = iter(depths)
-
-  increases = 0
-  last = next(depths)
-  for depth in iter(depths):
-    increases += depth > last
-    last = depth
-
-  return increases
+  return sum(right > left for left, right in zip(depths, depths[1:]))
 
 
 def sliding_window(depths):
