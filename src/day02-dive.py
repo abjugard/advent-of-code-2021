@@ -1,17 +1,20 @@
 from santas_little_helpers import day, get_data, timed
-from enum import Enum
 
 today = day(2021, 2)
+
+FORWARD = 0
+UP = 1
+DOWN = 2
 
 
 def calculate_position(steps):
   depth, travel_distance = 0, 0
   for direction, distance in steps:
-    if direction == 'forward':
+    if direction is FORWARD:
       travel_distance += distance
-    elif direction == 'up':
+    elif direction is UP:
       depth -= distance
-    elif direction == 'down':
+    elif direction is DOWN:
       depth += distance
   return depth * travel_distance
 
@@ -19,25 +22,33 @@ def calculate_position(steps):
 def calculate_position_2(steps):
   depth, travel_distance, aim = 0, 0, 0
   for direction, distance in steps:
-    if direction == 'forward':
+    if direction is FORWARD:
       travel_distance += distance
       depth += aim * distance
-    elif direction == 'up':
+    elif direction is UP:
       aim -= distance
-    elif direction == 'down':
+    elif direction is DOWN:
       aim += distance
   return depth * travel_distance
 
 
-def parse(inp):
-  direction, distance = inp.split()
-  return (direction, int(distance))
+def parse_direction(direction):
+  if direction == 'u':
+    return UP
+  elif direction == 'd':
+    return DOWN
+  return FORWARD
+
+
+def parse(step):
+  direction, distance = step.split()
+  return (parse_direction(direction[0]), int(distance))
 
 
 def main() -> None:
-  inp = list(get_data(today, [('func', parse)]))
-  print(f'{today} star 1 = {calculate_position(inp)}')
-  print(f'{today} star 2 = {calculate_position_2(inp)}')
+  steps = list(get_data(today, [('func', parse)]))
+  print(f'{today} star 1 = {calculate_position(steps)}')
+  print(f'{today} star 2 = {calculate_position_2(steps)}')
 
 
 if __name__ == '__main__':
