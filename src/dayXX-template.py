@@ -16,7 +16,7 @@ def part2(ns):
   return 2
 
 
-def main() -> None:
+def main():
   inp = list(get_data(today, [('func', int)]))
   star1 = part1(inp)
   # submit_answer(today, star1)

@@ -46,7 +46,7 @@ def parse(step):
   return (parse_direction(direction[0]), int(distance))
 
 
-def main() -> None:
+def main():
   steps = list(get_data(today, [('func', parse)]))
   print(f'{today} star 1 = {calculate_position(steps)}')
   print(f'{today} star 2 = {calculate_position_2(steps)}')
