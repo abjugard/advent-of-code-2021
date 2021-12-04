@@ -17,13 +17,13 @@ def get_power_consumption(diag_data):
   return int(gamma_rate, 2) * int(epsilon_rate, 2)
 
 
-def find_entry(diag_data, most_common = True, offset = 0):
+def find_entry(diag_data, most_common=True, offset=0):
   mc, lc = bit_value_order(diag_data, offset)
   comp = mc if most_common else lc
   filtered_data = [entry for entry in diag_data if entry[offset] == comp]
   if len(filtered_data) == 1:
     return int(filtered_data[0], 2)
-  return find_entry(filtered_data, most_common, offset+1)
+  return find_entry(filtered_data, most_common, offset + 1)
 
 
 def get_life_support_rating(diag_data):

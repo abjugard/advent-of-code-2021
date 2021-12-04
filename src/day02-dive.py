@@ -33,10 +33,11 @@ def calculate_position_2(steps):
 
 
 def parse_direction(direction):
-  if direction == 'u':
-    return UP
-  elif direction == 'd':
-    return DOWN
+  match direction:
+    case 'u':
+      return UP
+    case 'd':
+      return DOWN
   return FORWARD
 
 
