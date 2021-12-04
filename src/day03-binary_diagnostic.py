@@ -32,7 +32,7 @@ def get_life_support_rating(diag_data):
   return oxygen_rating * co2_rating
 
 
-def main() -> None:
+def main():
   diag_data = list(get_data(today))
   print(f'{today} star 1 = {get_power_consumption(diag_data)}')
   print(f'{today} star 2 = {get_life_support_rating(diag_data)}')

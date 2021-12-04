@@ -17,7 +17,7 @@ def sliding_window(depths):
   return increases
 
 
-def main() -> None:
+def main():
   depths = list(get_data(today, [('func', int)]))
   print(f'{today} star 1 = {larger_than_previous(depths)}')
   print(f'{today} star 2 = {sliding_window(depths)}')

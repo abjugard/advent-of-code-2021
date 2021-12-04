@@ -43,7 +43,7 @@ def parse(raw_inp):
   return draws, cards
 
 
-def main() -> None:
+def main():
   draws, cards = parse(get_data(today))
   stars = bingo(draws, cards)
   print(f'{today} star 1 = {next(stars)}')
