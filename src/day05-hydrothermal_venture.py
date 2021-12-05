@@ -4,11 +4,11 @@ from collections import Counter
 today = day(2021, 5)
 
 
-def straight_lines(all_lines):
-  straights = [(l, r) for l, r in all_lines if l[0] == r[0] or l[1] == r[1]]
+def non_diagonal_lines(all_lines):
+  non_diagonals = [(l, r) for l, r in all_lines if l[0] == r[0] or l[1] == r[1]]
   counter = Counter()
 
-  for (x1, y1), (x2, y2) in straights:
+  for (x1, y1), (x2, y2) in non_diagonals:
     x_s, y_s = min(x1, x2), min(y1, y2)
     x_e, y_e = max(x1, x2), max(y1, y2)
 
@@ -42,7 +42,7 @@ def parse(line):
 
 def main():
   lines = list(get_data(today, [('func', parse)]))
-  star1, counter = straight_lines(lines)
+  star1, counter = non_diagonal_lines(lines)
   print(f'{today} star 1 = {star1}')
   print(f'{today} star 2 = {diagonal_lines(lines, counter)}')
 
