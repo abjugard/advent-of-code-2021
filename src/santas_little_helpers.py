@@ -91,8 +91,8 @@ def get_data(today: date = date.today(), ops: list = base_ops, groups: bool = Fa
   op_chain = list(build_op_chain(ops))
   with file_path.open() as f:
     lines = f.read().strip().split('\n\n' if groups else '\n')
-    for line in lines:
-      yield format_line(line, op_chain)
+  for line in lines:
+    yield format_line(line, op_chain)
 
 
 def submit_answer(today: date, answer: str, level: int = 1) -> None:
