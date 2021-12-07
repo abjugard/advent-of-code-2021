@@ -4,21 +4,24 @@ from sys import maxsize
 today = day(2021, 7)
 
 
-def optimise_crab_moves(positions):
-  star1, star2 = [maxsize] * 2
-  for target in range(min(positions), max(positions)):
-    moves = [abs(target - n) for n in positions]
-    star1 = min(star1, sum(moves))
-    star2 = min(star2, sum((m * (m + 1)) // 2 for m in moves))
+def calculate_fuel(positions):
+  target = sorted(positions)[len(positions) // 2]
+  return sum(abs(target - pos) for pos in positions)
 
-  return (star1, star2)
+
+def cost(move):
+  return (move * (move + 1)) // 2
+
+
+def calculate_fuel_advanced(positions):
+  target = sum(positions) // len(positions)
+  return sum(cost(abs(target - pos)) for pos in positions)
 
 
 def main():
-  inp = next(get_data(today, [('split', ','), ('map', int)]))
-  star1, star2 = optimise_crab_moves(inp)
-  print(f'{today} star 1 = {star1}')
-  print(f'{today} star 2 = {star2}')
+  positions = next(get_data(today, [('split', ','), ('map', int)]))
+  print(f'{today} star 1 = {calculate_fuel(positions)}')
+  print(f'{today} star 2 = {calculate_fuel_advanced(positions)}')
 
 
 if __name__ == '__main__':
