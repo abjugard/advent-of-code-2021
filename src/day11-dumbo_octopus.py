@@ -1,23 +1,14 @@
 from santas_little_helpers import day, get_data, timed
+from santas_little_utils import build_dict_map, neighbours
 
 today = day(2021, 11)
-
-dirs = [(-1, -1), (0, -1), (1, -1),
-        (-1,  0),          (1,  0), 
-        (-1,  1), (0,  1), (1,  1)]
-
-
-def neighbours(p):
-  x, y = p
-  for xd, yd in dirs:
-    yield x + xd, y + yd
 
 
 def visit(cave, flashed, p):
   cave[p] += 1
   if cave[p] > 9 and p not in flashed:
     flashed.add(p)
-    for p_n in [p_n for p_n in neighbours(p) if p_n in cave]:
+    for p_n in neighbours(p, cave):
       visit(cave, flashed, p_n)
 
 
@@ -36,15 +27,8 @@ def simulate_octopi(cave):
       cave[p] = 0
 
 
-def build_map(inp):
-  cave = dict()
-  for y, xs in enumerate(inp):
-    cave.update({(x, y): int(h) for x, h in enumerate(xs)})
-  return cave
-
-
 def main():
-  cave = build_map(get_data(today))
+  cave = build_dict_map(get_data(today))
   star_gen = simulate_octopi(cave)
   print(f'{today} star 1 = {next(star_gen)}')
   print(f'{today} star 2 = {next(star_gen)}')
