@@ -1,5 +1,7 @@
 from santas_little_helpers import day, get_data, timed, submit_answer
-from itertools import combinations
+from santas_little_utils import *
+from itertools import *
+from collections import *
 
 today = day(2021, ?)
 
