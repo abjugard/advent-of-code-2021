@@ -1,5 +1,11 @@
 from collections import deque
 
+directions_8 = [(-1, -1), (0, -1), (1, -1),
+                (-1,  0),          (1,  0),
+                (-1,  1), (0,  1), (1,  1)]
+
+directions_4 = [(0, -1), (-1, 0), (1, 0), (0, 1)]
+
 
 def get_iterator(variable):
   try:
@@ -47,3 +53,33 @@ def tesseract_parse(inp):
     print('for cooler results, please install Pillow and pytesseract\n' \
         + '(along with a tesseract-ocr distribution)')
     return None
+
+
+def build_dict_map(map_data):
+  the_map = dict()
+  for y, xs in enumerate(map_data):
+    the_map.update({(x, y): int(h) for x, h in enumerate(xs)})
+  return the_map
+
+
+def build_grid(map_data):
+  return [xs for xs in map_data]
+
+
+def neighbours(p, borders=None, diagonals=True):
+  def within_borders(p_n, borders):
+    match borders:
+      case None: return True
+      case dict(): return p_n in borders
+      case list():
+        x_n, y_n = p_n
+        h = len(borders)
+        return h > 0 and 0 <= y_n < h and 0 <= x_n < len(borders[0])
+      case _:
+        print(type(borders))
+        raise Exception('unknown datastructure')
+  x, y = p
+  for xd, yd in directions_8 if diagonals else directions_4:
+    p_n = x + xd, y + yd
+    if within_borders(p_n, borders):
+      yield p_n
