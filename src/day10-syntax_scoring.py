@@ -1,24 +1,10 @@
-from santas_little_helpers import day, get_data, timed
+from santas_little_helpers import day, get_data, bench
+from statistics import median
 
 today = day(2021, 10)
 
-points = {
-  ')': 3,
-  ']': 57,
-  '}': 1197,
-  '>': 25137,
-  '(': 1,
-  '[': 2,
-  '{': 3,
-  '<': 4
-}
-
-opening = {
-  '(': ')',
-  '[': ']',
-  '{': '}',
-  '<': '>'
-}
+points = {')': 3, ']': 57, '}': 1197, '>': 25137, '(': 1, '[': 2, '{': 3, '<': 4}
+opening = { '(': ')', '[': ']', '{': '}', '<': '>' }
 
 
 def validate(line):
@@ -26,9 +12,8 @@ def validate(line):
   for c in line:
     if c in opening:
       stack.append(c)
-    else:
-      if c != opening[stack.pop()]:
-        return points[c], None
+    elif c != opening[stack.pop()]:
+      return points[c], None
   return 0, stack
 
 
@@ -39,16 +24,11 @@ def syntax_error_score(navigation_program):
 
 
 def autocomplete_score(stack):
-  score = 0
-  for c in reversed(stack):
-    score *= 5
-    score += points[c]
-  return score
+  return sum(pow(5, i) * points[c] for i, c in enumerate(stack))
 
 
 def autocomplete(incomplete):
-  results = sorted(autocomplete_score(stack) for stack in incomplete)
-  return results[len(results) // 2]
+  return median(autocomplete_score(stack) for stack in incomplete)
 
 
 def main():
@@ -59,4 +39,4 @@ def main():
 
 
 if __name__ == '__main__':
-  timed(main)
+  bench(main, 10000)
