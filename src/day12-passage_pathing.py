@@ -1,39 +1,42 @@
 from santas_little_helpers import day, get_data, timed
-import networkx as nx
+from networkx import DiGraph
 
 today = day(2021, 12)
 
 
-def all_paths(G, path=['start'], visited_twice=True):
-  curr = path[-1]
+def all_paths(curr='start', visited=set(), visited_twice=True):
   if curr == 'end':
-    yield path
+    return 1
 
+  count = 0
   for cave in G.neighbors(curr):
     visited_twice_nest = visited_twice
 
-    if cave in small_caves and cave in path:
-      if visited_twice_nest or cave in ('start', 'end'):
+    if cave in small_caves and cave in visited:
+      if visited_twice_nest:
         continue
       visited_twice_nest = True
 
-    for p_nest in all_paths(G, path + [cave], visited_twice_nest):
-      yield p_nest
+    count += all_paths(cave, visited | {cave}, visited_twice_nest)
+  return count
 
 
 def construct_graph(pairs):
-  global small_caves
-  G = nx.Graph()
-  small_caves = set(n for pair in pairs for n in pair if n == n.lower())
-  G.add_edges_from(pairs)
-  return G
+  global G, small_caves
+  G = DiGraph()
+  for l, r in [sorted(p, key=len, reverse=True) for p in pairs]:
+    if l != 'end':
+      G.add_edge(l, r)
+    if l != 'start':
+      G.add_edge(r, l)
+  small_caves = set(n for n in G.nodes() if n == n.lower())
 
 
 def main():
   inp = list(get_data(today, [('split', '-'), ('func', tuple)]))
-  G = construct_graph(inp)
-  print(f'{today} star 1 = {len(list(all_paths(G)))}')
-  print(f'{today} star 2 = {len(list(all_paths(G, visited_twice=False)))}')
+  construct_graph(inp)
+  print(f'{today} star 1 = {all_paths()}')
+  print(f'{today} star 2 = {all_paths(visited_twice=False)}')
 
 
 if __name__ == '__main__':
