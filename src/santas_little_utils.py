@@ -29,7 +29,7 @@ def ellipse(y, x, px_width):
 
 def create_image(result):
   from PIL import Image, ImageDraw
-  px_width = 8
+  px_width = 16
   dimensions = ((len(result[0]) + 4) * px_width, (len(result) + 4) * px_width)
   img = Image.new('RGBA', dimensions, (255, 255, 255, 0))
   draw = ImageDraw.Draw(img)
@@ -46,7 +46,7 @@ def tesseract_parse(inp):
     image = inp
     if isinstance(inp, list):
       image = create_image(inp)
-    return pytesseract.image_to_string(image, config='--psm 6')
+    return pytesseract.image_to_string(image, config='--psm 6').strip()
   except ImportError:
     for line in inp:
       print(''.join('█' if c == 1 else ' ' for c in line))
