@@ -50,16 +50,15 @@ def build_grid(map_data):
 
 def neighbours(p, borders=None, diagonals=True):
   def within_borders(p_n, borders):
-    match borders:
-      case None: return True
-      case dict(): return p_n in borders
-      case list():
-        x_n, y_n = p_n
-        h = len(borders)
-        return h > 0 and 0 <= y_n < h and 0 <= x_n < len(borders[0])
-      case _:
-        print(type(borders))
-        raise Exception('unknown datastructure')
+    if borders is None:
+      return True
+    elif isinstance(borders, dict):
+      return p_n in borders
+    elif isinstance(borders, list):
+      x_n, y_n = p_n
+      h = len(borders)
+      return h > 0 and 0 <= y_n < h and 0 <= x_n < len(borders[0])
+    raise Exception(f'unknown datastructure: {type(borders)}')
   x, y = p
   for xd, yd in directions_8 if diagonals else directions_4:
     p_n = x + xd, y + yd
