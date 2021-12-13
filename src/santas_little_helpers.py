@@ -96,6 +96,9 @@ def get_data(today: date = date.today(), ops: list = base_ops, groups: bool = Fa
 
 
 def submit_answer(today: date, answer: str, level: int = 1) -> None:
+  if answer is None:
+    print('No answer provided, ignoring')
+    return
   from bs4 import BeautifulSoup
   request, status_codes = import_requests()
   url = f'https://adventofcode.com/{today.year}/day/{today.day}/answer'
