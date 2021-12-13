@@ -1,4 +1,5 @@
 from collections import deque
+from santas_little_helpers import alphabet
 
 directions_8 = [(-1, -1), (0, -1), (1, -1),
                 (-1,  0),          (1,  0),
@@ -21,35 +22,16 @@ def get_last(generator):
   return d.pop()
 
 
-def ellipse(y, x, px_width):
-  yp = (y + 2) * px_width
-  xp = (x + 2) * px_width
-  return (xp, yp), (xp + px_width + 7, yp + px_width + 7)
-
-
-def create_image(result):
-  from PIL import Image, ImageDraw
-  px_width = 16
-  dimensions = ((len(result[0]) + 4) * px_width, (len(result) + 4) * px_width)
-  img = Image.new('RGBA', dimensions, (255, 255, 255, 0))
-  draw = ImageDraw.Draw(img)
-  for y, xs in enumerate(result):
-    for x, value in enumerate(xs):
-      if value == 1:
-        draw.ellipse(ellipse(y, x, px_width), fill='black')
-  return img
-
-
-def tesseract_parse(inp):
+def tesseract_parse(inp, chars=alphabet.upper()):
+  from santas_little_ocr_lib import parse_datastructure, set_to_grid, create_image
+  data, boundary = parse_datastructure(inp)
   try:
     import pytesseract
-    image = inp
-    if isinstance(inp, list):
-      image = create_image(inp)
-    return pytesseract.image_to_string(image, config='--psm 6').strip()
+    image = create_image(data, *boundary)
+    return pytesseract.image_to_string(image, config=f'--psm 6 -c tessedit_char_whitelist={chars}').strip()
   except ImportError:
-    for line in inp:
-      print(''.join('█' if c == 1 else ' ' for c in line))
+    for line in set_to_grid(data, *boundary):
+      print(''.join('█' if c else ' ' for c in line))
     print('for cooler results, please install Pillow and pytesseract\n' \
         + '(along with a tesseract-ocr distribution)')
     return None
