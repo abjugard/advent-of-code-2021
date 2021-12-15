@@ -80,8 +80,6 @@ def get_data(today: date = date.today(), ops: list = base_ops, groups: bool = Fa
     with file_path.open('wb') as f:
       for chunk in res.iter_content(chunk_size=128):
         f.write(chunk)
-        print(chunk.decode('utf-8'), end='')
-      print()
 
   file_path = aoc_data / f'day{today.day:02}.txt'
   if not file_path.exists():
@@ -191,9 +189,14 @@ def print_result(delta: [float], prefix: str = '', suffix: str = ''):
 
 def run_all():
   for file in sorted(Path('.').glob('day[!X]?-*.py')):
+    try:
+      import_start = time()
+      day = importlib.import_module(file.name[:-3])
+    except Exception as e:
+      print(f'Failed to import \'{file.name}\': {e}', file=sys.stderr)
+      print()
+      continue
     print(f'Running \'{file.name}\':')
-    import_start = time()
-    day = importlib.import_module(file.name[:-3])
     timed(day.main, import_start)
     print()
 
