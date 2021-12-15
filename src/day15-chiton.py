@@ -20,7 +20,7 @@ def build_graph(cave, mult=1):
 
 def determine_risk(cave, mult=1):
   g, c = build_graph(cave, mult)
-  path = nx.dijkstra_path(g, (0, 0), max(c))
+  path = nx.astar_path(g, (0, 0), max(c))
   return sum(c[p] for p in path) - c[(0, 0)]
 
 
