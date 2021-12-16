@@ -64,3 +64,10 @@ def neighbours(p, borders=None, diagonals=True):
     p_n = x + xd, y + yd
     if within_borders(p_n, borders):
       yield p_n
+
+
+def mul(numbers):
+  result = 1
+  for n in numbers:
+    result *= n
+  return result
