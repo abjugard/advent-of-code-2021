@@ -124,20 +124,20 @@ def time_fmt(delta: float) -> (float, str):
 
 def execute(func: Callable) -> float:
   start = time()
-  func()
-  return time() - start
+  result = func()
+  return result, time() - start
 
 
 def execute_multiple(func: Callable, times) -> [float]:
   setup = time() - setup_start
-  initial = execute(func)
+  _, initial = execute(func)
   if times is None:
     times = 1000 if initial < 0.005 else 100
   deltas = [initial + setup]
 
   disable_stdout()
   for _ in range(times - 1):
-    deltas += [execute(func) + setup]
+    deltas += [execute(func)[1] + setup]
   restore_stdout()
 
   return deltas
@@ -148,8 +148,9 @@ def timed(func: Callable, start=None) -> None:
     setup = time() - setup_start
   if start is not None:
     setup = time() - start
-  delta = execute(func)
+  result, delta = execute(func)
   print_result(delta + setup)
+  return result
 
 
 def disable_stdout() -> None:
