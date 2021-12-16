@@ -9,9 +9,7 @@ def score(template, pairs):
   for (left, _), count in pairs.items():
     counts[left] += count
   counts[template[-1]] += 1
-
-  counts = counts.most_common()
-  return (counts[0][1] - counts[-1][1])
+  return (max(counts.values()) - min(counts.values()))
 
 
 def expand(template, rules, checkpoints):
