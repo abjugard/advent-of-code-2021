@@ -1,3 +1,4 @@
+import json
 from santas_little_helpers import day, get_data, timed
 from math import ceil, floor
 
@@ -77,7 +78,7 @@ def max_magnitude_of_two(numbers):
 
 
 def main():
-  inp = list(get_data(today, [('func', eval)]))
+  inp = list(get_data(today, [('func', json.loads)]))
   print(f'{today} star 1 = {magnitude_of_sum(inp)}')
   print(f'{today} star 2 = {max_magnitude_of_two(inp)}')
 
