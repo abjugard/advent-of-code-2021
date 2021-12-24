@@ -4,13 +4,14 @@ from functools import cache
 
 today = day(2021, 21)
 
-die_rolled = 0
+dice_rolled = 0
+dice_probabilities = list(zip(range(3, 10), [1, 3, 6, 7, 6, 3, 1]))
 
 
 def roll():
-  global die_rolled
-  die_rolled += 1
-  result = (die_rolled % 100)
+  global dice_rolled
+  dice_rolled += 1
+  result = (dice_rolled % 100)
   return result
 
 
@@ -23,7 +24,7 @@ def practice_game(positions):
       scores[player] += positions[player] + 1
       if scores[player] >= 1000:
         break
-  return min(scores) * die_rolled
+  return min(scores) * dice_rolled
 
 
 @cache
@@ -32,14 +33,14 @@ def play(positions, scores=(0, 0), turn=0):
     return [1, 0] if turn == 1 else [0, 1]
   wins = [0, 0]
   positions, scores = list(positions), list(scores)
-  for dice in product(range(1, 4), repeat=3):
+  for dice, times in dice_probabilities:
     p, s = positions.copy(), scores.copy()
-    p[turn] = (p[turn] + sum(dice)) % 10
+    p[turn] = (p[turn] + dice) % 10
     s[turn] += p[turn] + 1
 
     w = play(tuple(p), tuple(s), (turn + 1) % 2)
-    wins[0] += w[0]
-    wins[1] += w[1]
+    wins[0] += w[0]*times
+    wins[1] += w[1]*times
   return wins
 
 
