@@ -20,13 +20,13 @@ def compute_index(vals):
   return int(''.join(n), 2)
 
 
-def enhance(image, algo, default):
+def enhance(image, algo, next_default):
   active = set(p for p, v in image.items() if v)
   xs = [x for x, _ in active]
   ys = [y for _, y in active]
   min_x, max_x = min(xs), max(xs)
   min_y, max_y = min(ys), max(ys)
-  next_image = defaultdict(lambda: default)
+  next_image = defaultdict(lambda: next_default)
   for y in range(min_y - 1, max_y + 2):
     for x in range(min_x - 1, max_x + 2):
       idx = compute_index(tuple(image[p] for p in all_points(x, y)))
@@ -35,10 +35,10 @@ def enhance(image, algo, default):
 
 
 def enhance_image(algo, image, checkpoints):
-  default = algo[0]
+  next_default = algo[0]
   for t in range(1, max(checkpoints) + 1):
-    image = enhance(image, algo, default)
-    default = not default
+    image = enhance(image, algo, next_default)
+    next_default = not next_default
     if t in checkpoints:
       yield len([c for _, c in image.items() if c])
 
